@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quotes.io</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/webfonts/fa-solid-900.ttf" />
+<body>
+  <div class="About">
+       <h1>Quotes.io</h1>
+  </div>
+    <div class="container">
+       <div id="text">
+
+       </div>
+       <div id="Author"></div>
+      <div class="tooltip"> 
+           <button id="Copy"><i class="fa-regular fa-copy"></i></button><br/>
+           <p  class="tooltiptext">Copy to Clipboard</p>
+          </div> 
+        <button id="NextQuote">Next <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></i></button>
+    </div>
+    <div id="snackbar">
+             <p>Copied !</p>
+             <h4 class="spark">Made By Spark</h4>
+    </div>
+    <script>
+      let Realdata = " ";
+      let text = document.getElementById("text");
+      let Author = document.getElementById("Author");
+      let btn = document.getElementById("NextQuote");
+      let copytext = document.getElementById("Copy");
+
+
+      const getRandomQuote = () =>{
+            let rquote = Math.floor(Math.random()*Realdata.length);
+             text.innerHTML = `<h1 class="quote" id="quote">"${Realdata[rquote].text}"</h1>`;
+             if(Realdata[rquote].author == null){
+              Realdata[rquote].author = "Unknown"
+             }
+             Author.innerHTML = `<h3 class="authorname" id="author">-${Realdata[rquote].author}</h3>`;
+            console.log(rquote);
+            console.log(Realdata);
+      }
+      
+      const Copytexts = () =>{
+         var textCopy = document.getElementById("quote");
+         var textCopy2 = document.getElementById("author");
+        //  console.log(textCopy);
+         navigator.clipboard.writeText(textCopy.innerText +"  "+textCopy2.innerText);
+        //  console.log(textCopy.innerText +"  "+textCopy2.innerText);
+      } 
+
+     const getQuote = async () =>{
+       const API = "https://type.fit/api/quotes";
+       try{
+         let data = await fetch(API);
+         console.log(data);
+         Realdata = await data.json();
+         console.log(Realdata);
+         getRandomQuote();
+       }
+       catch(error){
+         
+       }
+     }
+           function myFunction() {
+            var x = document.getElementById("snackbar");
+           x.className = "show";
+             setTimeout(function(){ x.className = x.className.replace("show", ""); }, 1500);
+          } 
+          function shows() {
+             Copytexts();
+             myFunction();
+          }
+      getQuote();
+      btn.addEventListener("click",getRandomQuote);
+      copytext.addEventListener("click",shows);
+
+</script>
+</body>
+  
+</html>
